@@ -1,21 +1,26 @@
 #!/usr/bin/env bash
 
+# Log a message.
 function log {
 	echo "[+] $1"
 }
 
+# Log a message at a sub-level.
 function sublog {
 	echo "   ⠿ $1"
 }
 
+# Log an error.
 function err {
 	echo "[x] $1" >&2
 }
 
+# Log an error at a sub-level.
 function suberr {
 	echo "   ⠍ $1" >&2
 }
 
+# Poll the 'elasticsearch' service until it responds with HTTP code 200.
 function wait_for_elasticsearch {
 	local elasticsearch_host="${ELASTICSEARCH_HOST:-elasticsearch}"
 
@@ -28,6 +33,7 @@ function wait_for_elasticsearch {
 	local -i result=1
 	local output
 
+	# retry for max 300s (60*5s)
 	for _ in $(seq 1 60); do
 		local -i exit_code=0
 		output="$(curl "${args[@]}")" || exit_code=$?
@@ -51,6 +57,7 @@ function wait_for_elasticsearch {
 	return $result
 }
 
+# Poll the Elasticsearch users API until it returns users.
 function wait_for_builtin_users {
 	local elasticsearch_host="${ELASTICSEARCH_HOST:-elasticsearch}"
 
@@ -66,9 +73,15 @@ function wait_for_builtin_users {
 	local -i exit_code
 	local -i num_users
 
+	# retry for max 30s (30*1s)
 	for _ in $(seq 1 30); do
 		num_users=0
 
+		# read exits with a non-zero code if the last read input doesn't end
+		# with a newline character. The printf without newline that follows the
+		# curl command ensures that the final input not only contains curl's
+		# exit code, but causes read to fail so we can capture the return value.
+		# Ref. https://unix.stackexchange.com/a/176703/152409
 		while IFS= read -r line || ! exit_code="$line"; do
 			if [[ "$line" =~ _reserved.+true ]]; then
 				(( num_users++ ))
@@ -79,6 +92,7 @@ function wait_for_builtin_users {
 			result=$exit_code
 		fi
 
+		# we expect more than just the 'elastic' user in the result
 		if (( num_users > 1 )); then
 			result=0
 			break
@@ -90,6 +104,7 @@ function wait_for_builtin_users {
 	return $result
 }
 
+# Verify that the given Elasticsearch user exists.
 function check_user_exists {
 	local username=$1
 
@@ -124,6 +139,7 @@ function check_user_exists {
 	return $result
 }
 
+# Set password of a given Elasticsearch user.
 function set_user_password {
 	local username=$1
 	local password=$2
@@ -156,6 +172,7 @@ function set_user_password {
 	return $result
 }
 
+# Create the given Elasticsearch user.
 function create_user {
 	local username=$1
 	local password=$2
@@ -189,6 +206,7 @@ function create_user {
 	return $result
 }
 
+# Ensure that the given Elasticsearch role is up-to-date, create it if required.
 function ensure_role {
 	local name=$1
 	local body=$2
