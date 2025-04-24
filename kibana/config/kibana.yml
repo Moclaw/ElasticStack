@@ -7,10 +7,6 @@ server.host: 0.0.0.0
 server.publicBaseUrl: "${KIBANA_PUBLIC_URL}"  # Set this in your .env file or docker-compose environment
 elasticsearch.hosts: [ http://elasticsearch:9200 ]
 
-# Configure for external access
-server.cors.enabled: true
-server.cors.origin: ["*"]
-
 monitoring.ui.container.elasticsearch.enabled: true
 monitoring.ui.container.logstash.enabled: true
 
