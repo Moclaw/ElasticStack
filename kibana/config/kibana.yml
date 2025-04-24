@@ -4,7 +4,12 @@
 #
 server.name: kibana
 server.host: 0.0.0.0
+server.publicBaseUrl: "${KIBANA_PUBLIC_URL}"  # Set this in your .env file or docker-compose environment
 elasticsearch.hosts: [ http://elasticsearch:9200 ]
+
+# Configure for external access
+server.cors.enabled: true
+server.cors.origin: ["*"]
 
 monitoring.ui.container.elasticsearch.enabled: true
 monitoring.ui.container.logstash.enabled: true
@@ -26,6 +31,12 @@ elasticsearch.password: ${KIBANA_SYSTEM_PASSWORD}
 #xpack.security.encryptionKey:
 #xpack.encryptedSavedObjects.encryptionKey:
 #xpack.reporting.encryptionKey:
+
+# If you plan to use HTTPS with Cloudflare, uncomment and set these:
+#server.ssl.enabled: true
+#server.ssl.certificate: /usr/share/kibana/config/certificates/kibana.crt
+#server.ssl.key: /usr/share/kibana/config/certificates/kibana.key
+#server.ssl.certificateAuthorities: [ "/usr/share/kibana/config/certificates/ca.crt" ]
 
 ## Fleet
 ## https://www.elastic.co/guide/en/kibana/current/fleet-settings-kb.html

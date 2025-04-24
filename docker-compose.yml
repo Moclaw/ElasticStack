@@ -50,8 +50,8 @@ services:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
       - elasticsearch:/usr/share/elasticsearch/data:Z
     ports:
-      - 9200:9200
-      - 9300:9300
+      - "9200:9200"  # Updated for proper binding
+      - "9300:9300"
     environment:
       node.name: elasticsearch
       ES_JAVA_OPTS: -Xms512m -Xmx512m
@@ -62,6 +62,10 @@ services:
       # Use single node discovery in order to disable production mode and avoid bootstrap checks.
       # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
       discovery.type: single-node
+      # Add network settings for external access
+      network.host: 0.0.0.0
+      http.cors.enabled: true
+      http.cors.allow-origin: "*"
     networks:
       - elk
     restart: unless-stopped
@@ -98,9 +102,11 @@ services:
     volumes:
       - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
     ports:
-      - 5601:5601
+      - "5601:5601"  # Updated for proper binding
     environment:
       KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+      SERVER_HOST: "0.0.0.0"
+      SERVER_PUBLICBASEURL: "${KIBANA_PUBLIC_URL:-http://localhost:5601}"
     networks:
       - elk
     depends_on:
