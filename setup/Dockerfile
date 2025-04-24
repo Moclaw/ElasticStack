@@ -8,5 +8,3 @@ RUN chmod +x /entrypoint.sh
 
 COPY lib.sh /lib.sh
 COPY roles /roles
-
-ENTRYPOINT ["/entrypoint.sh"]
