@@ -12,7 +12,7 @@ This project provides a complete Elastic Stack (ELK) environment using Docker Co
 
 1. **Clone the repository**
    ```sh
-   git clone <your-repo-url>
+   git clone https://github.com/Moclaw/ElasticStack.git
    cd ElasticStack
    ```
 
