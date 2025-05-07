@@ -11,25 +11,29 @@ This project provides a complete Elastic Stack (ELK) environment using Docker Co
 ## Getting Started
 
 1. **Clone the repository**
+
    ```sh
    git clone https://github.com/Moclaw/ElasticStack.git
    cd ElasticStack
    ```
 
 2. **Setup profile**
+
    ```sh
- sudo docker-compose --profile=setup up setup -d
+      docker-compose --profile=setup up setup -d
    ```
 
 3. **Start the Elastic Stack**
+
    ```sh
-   sudo docker-compose up -d
+      docker-compose up -d
    ```
+
    This command will start all services in the background.
 
 4. **Access the Services**
-   - **Elasticsearch:** http://localhost:9200
-   - **Kibana:** http://localhost:5601
+   - **Elasticsearch:** <http://localhost:9200>
+   - **Kibana:** <http://localhost:5601>
    - **Logstash:** Configured via pipeline in `logstash/pipeline/`
    - **Filebeat, Metricbeat, Heartbeat, Curator, Fleet:** Managed via their respective folders and compose files in `extensions/`
 
@@ -42,8 +46,9 @@ This project provides a complete Elastic Stack (ELK) environment using Docker Co
 ## Stopping the Stack
 
 To stop all services:
+
 ```sh
-docker-compose down
+   docker-compose down
 ```
 
 ## Troubleshooting
@@ -51,6 +56,7 @@ docker-compose down
 - Ensure Docker Desktop is running before starting the stack.
 - If ports are already in use, stop conflicting services or change the ports in the `docker-compose.yml` file.
 - Check logs with:
+
   ```sh
   docker-compose logs <service-name>
   ```

@@ -113,6 +113,74 @@ services:
     depends_on:
       - elasticsearch
     restart: unless-stopped
+  fleet:
+    container_name: fleet
+    build:
+      context: extensions/fleet/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./fleet/config/fleet.yml:/usr/share/fleet/config/fleet.yml:ro,Z
+    ports:
+      - 8220:8220
+    environment:
+      ELASTICSEARCH_HOST: ${ELASTICSEARCH_HOST:-elasticsearch}
+      ELASTICSEARCH_PORT: ${ELASTICSEARCH_PORT:-9200}
+      ELASTICSEARCH_USERNAME: ${ELASTICSEARCH_USERNAME:-elastic}
+      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD:-}
+      FLEET_INTERNAL_PASSWORD: ${FLEET_INTERNAL_PASSWORD:-}
+      FLEET_HOST: ${FLEET_HOST:-fleet}
+      FLEET_PORT: ${FLEET_PORT:-8220}
+      FLEET_USERNAME: ${FLEET_USERNAME:-fleet_internal}
+      FLEET_PASSWORD: ${FLEET_PASSWORD:-}
+
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+  apm-server:
+    container_name: apm-server
+    build:
+      context: extensions/fleet/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./apm-server/config/apm-server.yml:/usr/share/apm-server/config/apm-server.yml:ro,Z
+    ports:
+      - 8200:8200
+    environment:
+      ELASTICSEARCH_HOST: ${ELASTICSEARCH_HOST:-elasticsearch}
+      ELASTICSEARCH_PORT: ${ELASTICSEARCH_PORT:-9200}
+      ELASTICSEARCH_USERNAME: ${ELASTICSEARCH_USERNAME:-elastic}
+      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD:-}
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+      - kibana
+      - fleet
+    restart: unless-stopped
+
+  curator:
+    container_name: curator
+    build:
+      context: extensions/curator/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./curator/config/curator.yml:/usr/share/curator/curator.yml:ro,Z
+      - ./curator/config/actions:/usr/share/curator/actions:ro,Z
+    environment:
+      ELASTICSEARCH_HOST: ${ELASTICSEARCH_HOST:-elasticsearch}
+      ELASTICSEARCH_PORT: ${ELASTICSEARCH_PORT:-9200}
+      ELASTICSEARCH_USERNAME: ${ELASTICSEARCH_USERNAME:-elastic}
+      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD:-}
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
 
 networks:
   elk:
