@@ -18,7 +18,7 @@ This project provides a complete Elastic Stack (ELK) environment using Docker Co
 
 2. **Setup profile**
    ```sh
-  sudo docker compose --profile=setup up setup -d
+  sudo docker-compose --profile=setup up setup -d
    ```
 
 3. **Start the Elastic Stack**
