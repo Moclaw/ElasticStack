@@ -1,0 +1,25 @@
+---
+## Default Elasticsearch configuration from Elasticsearch base image.
+## https://github.com/elastic/elasticsearch/blob/main/distribution/docker/src/docker/config/elasticsearch.yml
+#
+cluster.name: docker-cluster
+network.host: 0.0.0.0
+http.port: 9200
+
+# Configure for external access
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+http.cors.allow-methods: OPTIONS, HEAD, GET, POST, PUT, DELETE
+http.cors.allow-headers: X-Requested-With, X-Auth-Token, Content-Type, Content-Length, Authorization
+
+## X-Pack settings
+## see https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings.html
+#
+xpack.license.self_generated.type: basic
+xpack.security.enabled: true
+
+# If you plan to use HTTPS with Cloudflare
+#xpack.security.http.ssl.enabled: true
+#xpack.security.http.ssl.key: /usr/share/elasticsearch/config/certificates/elasticsearch.key
+#xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/certificates/elasticsearch.crt
+#xpack.security.http.ssl.certificate_authorities: /usr/share/elasticsearch/config/certificates/ca.crt
