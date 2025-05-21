@@ -23,7 +23,7 @@ services:
       FLEET_URL: http://fleet-server:8220
       # Enrollment.
       # (a) Auto-enroll using basic authentication
-      ELASTICSEARCH_USERNAME: elastic
+      ELASTICSEARCH_USERNAME: ${ELASTICSEARCH_USERNAME:-elastic}
       ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD:-}
       # (b) Enroll using a pre-generated enrollment token
       #FLEET_ENROLLMENT_TOKEN: <enrollment_token>

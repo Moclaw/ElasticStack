@@ -26,7 +26,7 @@ services:
       KIBANA_FLEET_SETUP: '1'
       # Enrollment.
       # (a) Auto-enroll using basic authentication
-      ELASTICSEARCH_USERNAME: elastic
+      ELASTICSEARCH_USERNAME: ${ELASTICSEARCH_USERNAME:-elastic}
       ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD:-}
       # (b) Enroll using a pre-generated service token
       #FLEET_SERVER_SERVICE_TOKEN: <service_token>
